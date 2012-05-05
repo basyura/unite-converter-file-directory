@@ -2,24 +2,28 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
-function! unite#filters#converter_file_directory#define()"{{{
+function! unite#filters#converter_file_directory#define()
   return s:converter
-endfunction"}}}
+endfunction
 
 let s:converter = {
       \ 'name' : 'converter_file_directory',
       \ 'description' : '',
       \}
 
-function! s:converter.filter(candidates, context)"{{{
+function! s:converter.filter(candidates, context)
   let candidates = copy(a:candidates)
   for candidate in candidates
-    let abbr = s:padding(fnamemodify(candidate.word, ':t'), 25) . ' ' . fnamemodify(candidate.word, ':h')
-    let candidate.abbr = abbr
+    let abbr = s:padding(fnamemodify(candidate.word, ':t'), 25) . ' '
+    let path = fnamemodify(candidate.word, ':h')
+    if path == '.'
+      let path = ''
+    endif
+    let candidate.abbr = abbr . path
   endfor
 
   return candidates
-endfunction"}}}
+endfunction
 
 function! s:padding(msg, len)
   let msg = a:msg
@@ -32,4 +36,3 @@ endfunction
 let &cpo = s:save_cpo
 unlet s:save_cpo
 
-" vim: foldmethod=marker
