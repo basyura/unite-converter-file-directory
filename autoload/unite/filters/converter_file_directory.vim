@@ -14,8 +14,8 @@ let s:converter = {
 function! s:converter.filter(candidates, context)
   let candidates = copy(a:candidates)
   for candidate in candidates
-    let abbr = s:padding(fnamemodify(candidate.word, ':t'), 25) . ' '
-    let path = fnamemodify(candidate.word, ':h')
+    let abbr = s:padding(fnamemodify(candidate.word, ':t'), 30) . ' '
+    let path = fnamemodify(candidate.word, ':~:h')
     if path == '.'
       let path = ''
     endif
@@ -27,7 +27,7 @@ endfunction
 
 function! s:padding(msg, len)
   let msg = a:msg
-  while len(msg) < a:len
+  while strwidth(msg) < a:len
     let msg .= ' '
   endwhile
   return msg
