@@ -14,8 +14,9 @@ let s:converter = {
 function! s:converter.filter(candidates, context)
   let candidates = copy(a:candidates)
   for candidate in candidates
-    let abbr = s:padding(fnamemodify(candidate.word, ':t'), 30) . ' '
-    let path = fnamemodify(candidate.word, ':~:h')
+    let width = get(g:, 'unite_converter_file_directory_width', 35)
+    let abbr  = s:padding(fnamemodify(candidate.word, ':t'), width) . ' '
+    let path  = fnamemodify(candidate.word, ':~:h')
     if path == '.'
       let path = ''
     endif
