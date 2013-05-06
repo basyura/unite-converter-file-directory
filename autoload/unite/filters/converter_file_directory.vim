@@ -15,20 +15,21 @@ function! s:converter.filter(candidates, context)
   let candidates = copy(a:candidates)
   let max = 0
   for candidate in candidates
-    let abbr = strwidth(fnamemodify(candidate.word, ':t'))
+    let abbr = strwidth(s:convert_to_abbr(candidate))
     if max < abbr
       let max = abbr
     endif
   endfor
   let max += 2
-  let max_width = get(g:, 'unite_converter_file_directory_width', 35) 
+  let max_width = get(g:, 'unite_converter_file_directory_width', 45) 
   if max > max_width
     let max = max_width
   endif
 
   for candidate in candidates
-    let abbr  = s:padding(fnamemodify(candidate.word, ':t'), max) . ' '
-    let path  = fnamemodify(candidate.word, ':~:h')
+    let abbr = s:convert_to_abbr(candidate)
+    let abbr = s:padding(abbr, max) . ' '
+    let path = fnamemodify(candidate.word, ':~:h')
     if path == '.'
       let path = ''
     endif
@@ -36,6 +37,12 @@ function! s:converter.filter(candidates, context)
   endfor
 
   return candidates
+endfunction
+
+function! s:convert_to_abbr(candidate)
+  let dir  = split(fnamemodify(a:candidate.word, ':h'),'/')[-1]
+  let abbr =  fnamemodify(a:candidate.word, ':t') . ' (' . dir . ')'
+  return abbr
 endfunction
 
 function! s:padding(msg, len)
